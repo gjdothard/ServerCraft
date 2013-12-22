@@ -1,14 +1,16 @@
 package kaisercode.servercraft;
  
+import kaisercode.servercraft.blocks.blockTitanium;
+import kaisercode.servercraft.blocks.blocks;
 import kaisercode.servercraft.blocks.machineServerFrame;
 import kaisercode.servercraft.blocks.oreTitaniumOxide;
-import kaisercode.servercraft.tileentities.TE_Info;
-import kaisercode.servercraft.tileentities.TE_Server;
+import kaisercode.servercraft.items.items;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import cpw.mods.fml.common.ICraftingHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -28,9 +30,7 @@ public class ServerCraft {
         @Instance("ServerCraft")
         public static ServerCraft instance;
         
-        public static Item ingotTitanium;
-        public static Block oreTitaniumOxide;
-        public static Block machineServerFrame;
+          
        
         // Says where the client and server 'proxy' code is loaded.
         @SidedProxy(clientSide="kaisercode.servercraft.ClientProxy", serverSide="kaisercode.servercraft.CommonProxy")
@@ -38,15 +38,6 @@ public class ServerCraft {
        
         @EventHandler
         public void preInit(FMLPreInitializationEvent event) {
-        	 ingotTitanium = new kaisercode.servercraft.items.ingotTitanium(800)
-        	 	.setMaxStackSize(64)
-                .setUnlocalizedName("ingotTitanium")
-                .setTextureName("servercraft:ingotTitanium");
-        	 
-        	 oreTitaniumOxide = new oreTitaniumOxide(500, Material.iron);
-        	 
-        	machineServerFrame = new machineServerFrame(501, Material.iron);
-          	
         	
         }
        
@@ -54,20 +45,17 @@ public class ServerCraft {
         public void load(FMLInitializationEvent event) {
                 proxy.registerRenderers();
                 
-                GameRegistry.registerBlock(oreTitaniumOxide, "oreTitaniumOxide");
-                GameRegistry.registerBlock(machineServerFrame, "machineServerFrame");
+                // Register the Crafting Handler
+                ICraftingHandler scch = new SSCH();
+                GameRegistry.registerCraftingHandler(scch);              
                 
-                GameRegistry.registerTileEntity(TE_Server.class, TE_Info.TE_Server_Key);
-                
-                LanguageRegistry.addName(ingotTitanium, "Titanium Ingot");
-                LanguageRegistry.addName(oreTitaniumOxide, "Titanium Oxide");
-                LanguageRegistry.addName(machineServerFrame, "Server Frame");
-                
-                GameRegistry.addShapelessRecipe(new ItemStack(Block.oreIron), new ItemStack(Item.ingotIron) );
-                GameRegistry.addSmelting(oreTitaniumOxide.blockID, new ItemStack(ingotTitanium), 10f);
+                blocks.registerBlocks();
+                blocks.registerNames();
+                items.registerNames();               
+                recipes.registerRecipes();
         }
-       
-        @EventHandler
+
+		@EventHandler
         public void postInit(FMLPostInitializationEvent event) {
                 // Stub Method
         }

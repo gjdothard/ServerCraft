@@ -5,8 +5,6 @@ import cpw.mods.fml.common.network.FMLNetworkHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
-import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -17,9 +15,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import kaisercode.servercraft.tileentities.TE_Server;
 
-public class machineServerFrame extends BlockContainer {
+public class machineServerFrame extends Block {
 
 	
 
@@ -39,16 +36,15 @@ public class machineServerFrame extends BlockContainer {
     }
 	
 	public TileEntity createNewTileEntity(World world) {
-		return new TE_Server();
+	return null;
 	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister icon) {
-		topIcon = icon.registerIcon("ServerCraft:server_top");
-		sideIcon = icon.registerIcon("ServerCraft:server_side");
 		frontIcon = icon.registerIcon("ServerCraft:server_front_on");
-		
+		topIcon = icon.registerIcon("ServerCraft:server_top");
+		sideIcon = icon.registerIcon("ServerCraft:server_side");		
 	}
 	
 	@Override
@@ -108,12 +104,8 @@ public class machineServerFrame extends BlockContainer {
 	
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-		if(isActive == true) {
-			isActive = false;
-		}
-		else{
-			isActive = true;
-		}
+		 
+		player.openGui(ServerCraft.instance, 1, world, x, y, z);
 		return true;
 	}
 }
